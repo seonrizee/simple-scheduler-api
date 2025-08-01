@@ -1,6 +1,7 @@
 package io.github.seonrizee.scheduler.entity;
 
 import io.github.seonrizee.scheduler.dto.request.ScheduleRequestDto;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,9 +18,17 @@ public class Schedule extends BaseDateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 30)
     private String title;
+
+    @Column(nullable = false, length = 200)
     private String contents;
+
+    @Column(nullable = false, length = 30)
     private String username;
+
+    @Column(nullable = false)
     private String password;
 
     public Schedule(ScheduleRequestDto requestDto) {
