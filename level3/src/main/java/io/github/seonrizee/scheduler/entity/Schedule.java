@@ -1,6 +1,7 @@
 package io.github.seonrizee.scheduler.entity;
 
 import io.github.seonrizee.scheduler.dto.request.ScheduleRequestDto;
+import io.github.seonrizee.scheduler.dto.request.ScheduleUpdateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,5 +37,10 @@ public class Schedule extends BaseDateEntity {
         this.contents = requestDto.getContents();
         this.username = requestDto.getUsername();
         this.password = requestDto.getPassword();
+    }
+
+    public void updateById(ScheduleUpdateRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.username = requestDto.getUsername();
     }
 }

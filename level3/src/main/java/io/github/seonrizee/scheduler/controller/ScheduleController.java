@@ -1,6 +1,7 @@
 package io.github.seonrizee.scheduler.controller;
 
 import io.github.seonrizee.scheduler.dto.request.ScheduleRequestDto;
+import io.github.seonrizee.scheduler.dto.request.ScheduleUpdateRequestDto;
 import io.github.seonrizee.scheduler.dto.response.CommonDto;
 import io.github.seonrizee.scheduler.dto.response.ScheduleResponseDto;
 import io.github.seonrizee.scheduler.dto.response.SchedulesResponseDto;
@@ -9,6 +10,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,10 +46,20 @@ public class ScheduleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CommonDto<ScheduleResponseDto>> getScheduleById(@PathVariable Long id) {
+    public ResponseEntity<CommonDto<ScheduleResponseDto>> getSchedule(@PathVariable Long id) {
 
         ScheduleResponseDto responseDto = scheduleService.findById(id);
 
         return new ResponseEntity<>(new CommonDto<>(HttpStatus.OK, "success", responseDto), HttpStatus.OK);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CommonDto<ScheduleResponseDto>> updateSchedule(
+            @RequestBody ScheduleUpdateRequestDto requestDto,
+            @PathVariable Long id) {
+        ScheduleResponseDto responseDto = scheduleService.updateSchedule(id, requestDto);
+
+        return new ResponseEntity<>(new CommonDto<>(HttpStatus.OK, "success", responseDto), HttpStatus.OK);
+    }
+
 }

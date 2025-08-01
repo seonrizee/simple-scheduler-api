@@ -15,4 +15,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new CommonDto<>(HttpStatus.NOT_FOUND, e.getMessage(), null),
                 HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<CommonDto<Void>> handleInvalidPasswordException(InvalidPasswordException e) {
+
+        return new ResponseEntity<>(new CommonDto<>(HttpStatus.BAD_REQUEST, e.getMessage(), null),
+                HttpStatus.BAD_REQUEST);
+    }
 }
