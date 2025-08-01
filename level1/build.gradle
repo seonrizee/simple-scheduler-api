@@ -7,9 +7,3 @@ plugins {
 bootJar {
     mainClass = 'io.github.seonrizee.scheduler.Level1Application' // level1의 메인 클래스 경로
 }
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-}
