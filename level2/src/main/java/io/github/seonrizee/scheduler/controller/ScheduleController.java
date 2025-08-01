@@ -37,7 +37,7 @@ public class ScheduleController {
     public ResponseEntity<CommonDto<SchedulesResponseDto>> getSchedules(
             @RequestParam(required = false) Optional<String> username) {
 
-        SchedulesResponseDto responseDto = scheduleService.getSchedules(username);
+        SchedulesResponseDto responseDto = scheduleService.findAllSchedules(username);
 
         return new ResponseEntity<>(new CommonDto<>(HttpStatus.OK, "success", responseDto), HttpStatus.OK);
     }

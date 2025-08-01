@@ -9,5 +9,5 @@ public interface ScheduleService {
 
     ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto);
 
-    SchedulesResponseDto getSchedules(Optional<String> username);
+    SchedulesResponseDto findAllSchedules(Optional<String> username);
 }

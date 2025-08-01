@@ -30,10 +30,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional(readOnly = true)
-    public SchedulesResponseDto getSchedules(Optional<String> username) {
-        List<Schedule> schedules = null;
+    public SchedulesResponseDto findAllSchedules(Optional<String> username) {
+
+        List<Schedule> schedules;
+
         if (username.isPresent()) {
-            schedules = scheduleRepository.findSchedulesByUsername((username.get()));
+            schedules = scheduleRepository.findByUsername((username.get()));
         } else {
             schedules = scheduleRepository.findAll();
         }
