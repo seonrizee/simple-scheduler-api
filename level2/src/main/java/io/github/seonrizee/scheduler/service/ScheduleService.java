@@ -10,4 +10,6 @@ public interface ScheduleService {
     ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto);
 
     SchedulesResponseDto findAllSchedules(Optional<String> username);
+
+    ScheduleResponseDto findById(Long id);
 }
