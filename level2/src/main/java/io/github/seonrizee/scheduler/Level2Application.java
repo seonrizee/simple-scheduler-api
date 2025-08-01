@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
-public class SimpleSchedulerApiApplication {
+public class Level2Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(SimpleSchedulerApiApplication.class, args);
+        SpringApplication.run(Level2Application.class, args);
     }
 
 }
