@@ -4,13 +4,12 @@ import io.github.seonrizee.scheduler.dto.request.ScheduleRequestDto;
 import io.github.seonrizee.scheduler.dto.response.ScheduleResponseDto;
 import io.github.seonrizee.scheduler.dto.response.SchedulesResponseDto;
 import io.github.seonrizee.scheduler.entity.Schedule;
+import io.github.seonrizee.scheduler.exception.ScheduleNotFoundException;
 import io.github.seonrizee.scheduler.repository.ScheduleRepository;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -49,7 +48,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ScheduleResponseDto findById(Long id) {
 
         Schedule foundSchedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "선택한 일정을 찾을 수 없습니다."));
+                .orElseThrow(ScheduleNotFoundException::new);
 
         return new ScheduleResponseDto(foundSchedule);
     }
