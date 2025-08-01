@@ -3,12 +3,16 @@ package io.github.seonrizee.scheduler.controller;
 import io.github.seonrizee.scheduler.dto.request.ScheduleRequestDto;
 import io.github.seonrizee.scheduler.dto.response.CommonDto;
 import io.github.seonrizee.scheduler.dto.response.ScheduleResponseDto;
+import io.github.seonrizee.scheduler.dto.response.SchedulesResponseDto;
 import io.github.seonrizee.scheduler.service.ScheduleService;
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,4 +32,14 @@ public class ScheduleController {
         return new ResponseEntity<>(new CommonDto<>(HttpStatus.CREATED, "success", responseDto),
                 HttpStatus.CREATED);
     }
+
+    @GetMapping
+    public ResponseEntity<CommonDto<SchedulesResponseDto>> getSchedules(
+            @RequestParam(required = false) Optional<String> username) {
+
+        SchedulesResponseDto responseDto = scheduleService.getSchedules(username);
+
+        return new ResponseEntity<>(new CommonDto<>(HttpStatus.OK, "success", responseDto), HttpStatus.OK);
+    }
+
 }
