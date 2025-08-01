@@ -35,9 +35,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<Schedule> schedules;
 
         if (username.isPresent()) {
-            schedules = scheduleRepository.findByUsername((username.get()));
+            schedules = scheduleRepository.findByUsernameOrderByUpdatedAtDesc((username.get()));
         } else {
-            schedules = scheduleRepository.findAll();
+            schedules = scheduleRepository.findAllByOrderByUpdatedAtDesc();
         }
 
         return new SchedulesResponseDto(schedules);

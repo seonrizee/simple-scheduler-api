@@ -68,14 +68,14 @@ class ScheduleServiceImplTest {
         Schedule schedule2 = new Schedule(requestDto2);
         List<Schedule> allSchedules = List.of(schedule1, schedule2);
 
-        when(scheduleRepository.findAll()).thenReturn(allSchedules);
+        when(scheduleRepository.findAllByOrderByUpdatedAtDesc()).thenReturn(allSchedules);
 
         // when
         SchedulesResponseDto responseDto = scheduleService.findAllSchedules(Optional.empty());
 
         // then
         assertThat(responseDto.getScheduleResponseDtoList()).hasSize(2);
-        verify(scheduleRepository, times(1)).findAll();
+        verify(scheduleRepository, times(1)).findAllByOrderByUpdatedAtDesc();
     }
 
     @Test
@@ -90,7 +90,7 @@ class ScheduleServiceImplTest {
         Schedule schedule2 = new Schedule(requestDto2);
         List<Schedule> userSchedules = List.of(schedule1, schedule2);
 
-        when(scheduleRepository.findByUsername(TEST_USERNAME)).thenReturn(userSchedules);
+        when(scheduleRepository.findByUsernameOrderByUpdatedAtDesc(TEST_USERNAME)).thenReturn(userSchedules);
 
         // when
         SchedulesResponseDto responseDto = scheduleService.findAllSchedules(Optional.of(TEST_USERNAME));
@@ -100,7 +100,7 @@ class ScheduleServiceImplTest {
         assertThat(responseDto.getScheduleResponseDtoList())
                 .allMatch(dto -> dto.getUsername().equals(TEST_USERNAME));
 
-        verify(scheduleRepository, times(1)).findByUsername(TEST_USERNAME);
+        verify(scheduleRepository, times(1)).findByUsernameOrderByUpdatedAtDesc(TEST_USERNAME);
         verify(scheduleRepository, never()).findAll();
     }
 }

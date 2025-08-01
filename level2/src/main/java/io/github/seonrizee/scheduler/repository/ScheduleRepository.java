@@ -5,5 +5,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    List<Schedule> findByUsername(String username);
+
+    List<Schedule> findByUsernameOrderByUpdatedAtDesc(String username);
+
+    List<Schedule> findAllByOrderByUpdatedAtDesc();
 }
