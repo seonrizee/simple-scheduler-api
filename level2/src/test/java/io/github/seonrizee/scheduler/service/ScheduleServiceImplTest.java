@@ -1,6 +1,7 @@
 package io.github.seonrizee.scheduler.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -11,6 +12,7 @@ import io.github.seonrizee.scheduler.dto.request.ScheduleRequestDto;
 import io.github.seonrizee.scheduler.dto.response.ScheduleResponseDto;
 import io.github.seonrizee.scheduler.dto.response.SchedulesResponseDto;
 import io.github.seonrizee.scheduler.entity.Schedule;
+import io.github.seonrizee.scheduler.exception.ScheduleNotFoundException;
 import io.github.seonrizee.scheduler.repository.ScheduleRepository;
 import java.util.List;
 import java.util.Optional;
@@ -102,5 +104,43 @@ class ScheduleServiceImplTest {
 
         verify(scheduleRepository, times(1)).findByUsernameOrderByUpdatedAtDesc(TEST_USERNAME);
         verify(scheduleRepository, never()).findAll();
+    }
+
+    @Test
+    @DisplayName("사용자는 ID로 특정 일정을 조회할 수 있다.")
+    void findById_success() {
+
+        // given
+        Long firstGeneratedId = 1L;
+        Schedule foundSchedule = new Schedule(
+                new ScheduleRequestDto(TEST_TITLE, TEST_CONTENTS, TEST_USERNAME, TEST_PASSWORD));
+        when(scheduleRepository.findById(firstGeneratedId)).thenReturn(Optional.of(foundSchedule));
+
+        // when
+        ScheduleResponseDto responseDto = scheduleService.findById(firstGeneratedId);
+
+        // then
+        assertThat(responseDto).isNotNull();
+        assertThat(responseDto.getTitle()).isEqualTo(TEST_TITLE);
+        assertThat(responseDto.getContents()).isEqualTo(TEST_CONTENTS);
+        assertThat(responseDto.getUsername()).isEqualTo(TEST_USERNAME);
+
+        verify(scheduleRepository, times(1)).findById(firstGeneratedId);
+    }
+
+    @Test
+    @DisplayName("사용자가 존재하지 않는 ID로 조회 시 ScheduleNotFoundException 예외가 발생한다.")
+    void findById_throwsException_whenScheduleNotFound() {
+
+        // given
+        Long nonExistentId = 100L;
+        when(scheduleRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.findById(nonExistentId))
+                .isInstanceOf(ScheduleNotFoundException.class) // 예외 타입 검증
+                .hasMessage("선택한 일정이 존재하지 않습니다."); // 예외 메시지 검증
+
+        verify(scheduleRepository, times(1)).findById(nonExistentId);
     }
 }
