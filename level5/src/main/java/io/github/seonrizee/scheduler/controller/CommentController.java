@@ -26,7 +26,7 @@ public class CommentController {
     public ResponseEntity<CommonDto<CommentResponseDto>> createComment(@RequestBody CommentRequestDto requestDto,
                                                                        @PathVariable Long scheduleId) {
 
-        CommentResponseDto responseDto = commentService.createComment(requestDto, scheduleId);
+        CommentResponseDto responseDto = commentService.createComment(scheduleId, requestDto);
 
         return new ResponseEntity<>(new CommonDto<>(HttpStatus.CREATED, "success", responseDto), HttpStatus.CREATED);
     }
