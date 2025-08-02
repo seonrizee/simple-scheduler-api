@@ -27,13 +27,13 @@ public class ScheduleResponseDto {
         this.updatedAt = schedule.getUpdatedAt();
     }
 
-    public ScheduleResponseDto(Schedule schedule, List<CommentResponseDto> commentResponseDtoList) {
+    public ScheduleResponseDto(Schedule schedule, CommentsResponseDto commentsResponseDto) {
         this.id = schedule.getId();
         this.title = schedule.getTitle();
         this.contents = schedule.getContents();
         this.username = schedule.getUsername();
         this.createdAt = schedule.getCreatedAt();
         this.updatedAt = schedule.getUpdatedAt();
-        this.comments = commentResponseDtoList;
+        this.comments = commentsResponseDto.getCommentResponseDtoList();
     }
 }
