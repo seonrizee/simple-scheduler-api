@@ -15,10 +15,9 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final ScheduleService scheduleService;
 
-    public CommentServiceImpl(CommentRepository commentRepository, ScheduleService scheduleService,
-                              ScheduleServiceImpl scheduleServiceImpl) {
+    public CommentServiceImpl(CommentRepository commentRepository, ScheduleService scheduleService) {
         this.commentRepository = commentRepository;
-        this.scheduleService = scheduleServiceImpl;
+        this.scheduleService = scheduleService;
     }
 
     @Override
