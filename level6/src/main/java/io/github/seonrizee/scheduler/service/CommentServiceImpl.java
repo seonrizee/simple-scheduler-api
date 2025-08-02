@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CommentServiceImpl implements CommentService {
 
+    private static final long MAX_COMMENT_COUNT = 10;
 
     private final CommentRepository commentRepository;
     private final ScheduleService scheduleService;
@@ -27,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
         scheduleService.findScheduleByIdOrThrow(scheduleId);
 
         long commentCnt = commentRepository.countByScheduleId(scheduleId);
-        if (commentCnt >= 10) {
+        if (commentCnt >= MAX_COMMENT_COUNT) {
             throw new CommentLimitExceededException();
         }
 
