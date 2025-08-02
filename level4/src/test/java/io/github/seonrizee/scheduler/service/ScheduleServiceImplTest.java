@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import io.github.seonrizee.scheduler.dto.request.PasswordRequestDto;
 import io.github.seonrizee.scheduler.dto.request.ScheduleRequestDto;
 import io.github.seonrizee.scheduler.dto.request.ScheduleUpdateRequestDto;
 import io.github.seonrizee.scheduler.dto.response.ScheduleResponseDto;
@@ -65,9 +66,9 @@ class ScheduleServiceImplTest {
 
         // given
         final Schedule schedule1 = new Schedule(
-            new ScheduleRequestDto("테스트 제목 1", "테스트 내용 1", "user1", "1111"));
+                new ScheduleRequestDto("테스트 제목 1", "테스트 내용 1", "user1", "1111"));
         final Schedule schedule2 = new Schedule(
-            new ScheduleRequestDto("테스트 제목 2", "테스트 내용 2", "user2", "2222"));
+                new ScheduleRequestDto("테스트 제목 2", "테스트 내용 2", "user2", "2222"));
         final List<Schedule> allSchedules = List.of(schedule1, schedule2);
 
         when(scheduleRepository.findAllByOrderByUpdatedAtDesc()).thenReturn(allSchedules);
@@ -87,9 +88,9 @@ class ScheduleServiceImplTest {
         // given
         final String targetUsername = "targetUser";
         final Schedule schedule1 = new Schedule(
-            new ScheduleRequestDto("테스트 제목 1", "테스트 내용 1", targetUsername, "1111"));
+                new ScheduleRequestDto("테스트 제목 1", "테스트 내용 1", targetUsername, "1111"));
         final Schedule schedule2 = new Schedule(
-            new ScheduleRequestDto("테스트 제목 2", "테스트 내용 2", targetUsername, "2222"));
+                new ScheduleRequestDto("테스트 제목 2", "테스트 내용 2", targetUsername, "2222"));
         final List<Schedule> userSchedules = List.of(schedule1, schedule2);
 
         when(scheduleRepository.findByUsernameOrderByUpdatedAtDesc(targetUsername)).thenReturn(userSchedules);
@@ -117,7 +118,7 @@ class ScheduleServiceImplTest {
         final String username = "user";
         final String password = "1234";
         final Schedule foundSchedule = new Schedule(
-            new ScheduleRequestDto(title, contents, username, password));
+                new ScheduleRequestDto(title, contents, username, password));
         when(scheduleRepository.findById(existentId)).thenReturn(Optional.of(foundSchedule));
 
         // when
@@ -133,7 +134,7 @@ class ScheduleServiceImplTest {
     }
 
     @Test
-    @DisplayName("사용자가 존재하지 않는 ID로 조회 시 ScheduleNotFoundException 예외가 발생한다.")
+    @DisplayName("사용자가 존재하지 않는 ID로 조회 시 예외가 발생한다.")
     void findById_withNonExistentId_shouldThrowScheduleNotFoundException() {
 
         // given
@@ -149,7 +150,7 @@ class ScheduleServiceImplTest {
     }
 
     @Test
-    @DisplayName("사용자가 선택한 일정의 ID와 비밀번호가 일치하면 선택한 ID의 일정을 수정할 수 있다.")
+    @DisplayName("사용자는 선택한 일정에 대해 입력한 비밀번호가 일치하면 일정을 수정할 수 있다.")
     void updateSchedule_withValidIdAndPassword_shouldSucceed() {
         // given
         final Long existentId = 1L;
@@ -159,14 +160,14 @@ class ScheduleServiceImplTest {
         final String updatedUsername = "수정된 작성자";
 
         final Schedule existingSchedule = new Schedule(
-            new ScheduleRequestDto("원본 제목", originalContents, "user1", password));
+                new ScheduleRequestDto("원본 제목", originalContents, "user1", password));
         final ScheduleUpdateRequestDto requestDto = new ScheduleUpdateRequestDto(updatedTitle, updatedUsername,
-            password);
+                password);
 
         // Mocking
         when(scheduleRepository.findById(existentId)).thenReturn(Optional.of(existingSchedule));
         when(scheduleRepository.saveAndFlush(any(Schedule.class))).thenAnswer(
-            invocation -> invocation.getArgument(0));
+                invocation -> invocation.getArgument(0));
 
         // when
         final ScheduleResponseDto responseDto = scheduleService.updateSchedule(existentId, requestDto);
@@ -209,7 +210,7 @@ class ScheduleServiceImplTest {
         final String incorrectPassword = "incorrect_password";
 
         final Schedule existingSchedule = new Schedule(
-            new ScheduleRequestDto("원본 제목", "원본 내용", "user1", correctPassword));
+                new ScheduleRequestDto("원본 제목", "원본 내용", "user1", correctPassword));
         final ScheduleUpdateRequestDto requestDto = new ScheduleUpdateRequestDto("수정된 제목", "수정된 작성자",
                 "incorrect_password");
 
@@ -223,5 +224,62 @@ class ScheduleServiceImplTest {
         // Repository 메서드 호출 횟수 검증 (saveAndFlush는 호출되면 안 됨)
         verify(scheduleRepository, times(1)).findById(existentId);
         verify(scheduleRepository, never()).saveAndFlush(any(Schedule.class));
+    }
+
+    @Test
+    @DisplayName("사용자는 선택한 일정에 대해 입력한 비밀번호가 일치하면 일정을 삭제할 수 있다.")
+    void deleteSchedule_withValidIdAndPassword_shouldSucceed() {
+        // given
+        final Long existentId = 1L;
+        final String correctPassword = "1234";
+        final PasswordRequestDto requestDto = new PasswordRequestDto(correctPassword);
+        final Schedule existingSchedule = new Schedule(
+                new ScheduleRequestDto("제목", "내용", "user", correctPassword));
+
+        when(scheduleRepository.findById(existentId)).thenReturn(Optional.of(existingSchedule));
+
+        // when
+        scheduleService.deleteScheduleById(existentId, requestDto);
+
+        // then
+        verify(scheduleRepository, times(1)).findById(existentId);
+        verify(scheduleRepository, times(1)).deleteById(existentId);
+    }
+
+    @Test
+    @DisplayName("일정 삭제 시 ID가 존재하지 않으면 예외가 발생한다.")
+    void deleteSchedule_withNonExistentId_shouldThrowScheduleNotFoundException() {
+        // given
+        final Long nonExistentId = 99L;
+        final PasswordRequestDto requestDto = new PasswordRequestDto("1234");
+
+        when(scheduleRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.deleteScheduleById(nonExistentId, requestDto))
+                .isInstanceOf(ScheduleNotFoundException.class);
+
+        verify(scheduleRepository, times(1)).findById(nonExistentId);
+        verify(scheduleRepository, never()).deleteById(any(Long.class));
+    }
+
+    @Test
+    @DisplayName("일정 삭제 시 비밀번호가 일치하지 않으면 예외가 발생한다.")
+    void deleteSchedule_withIncorrectPassword_shouldThrowInvalidPasswordException() {
+        // given
+        final Long existentId = 1L;
+        final String correctPassword = "1234";
+        final PasswordRequestDto requestDto = new PasswordRequestDto("wrong_password");
+        final Schedule existingSchedule = new Schedule(
+                new ScheduleRequestDto("제목", "내용", "user", correctPassword));
+
+        when(scheduleRepository.findById(existentId)).thenReturn(Optional.of(existingSchedule));
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.deleteScheduleById(existentId, requestDto))
+                .isInstanceOf(InvalidPasswordException.class);
+
+        verify(scheduleRepository, times(1)).findById(existentId);
+        verify(scheduleRepository, never()).deleteById(any(Long.class));
     }
 }
