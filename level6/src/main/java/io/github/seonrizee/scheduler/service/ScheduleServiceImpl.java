@@ -49,7 +49,11 @@ public class ScheduleServiceImpl implements ScheduleService {
             schedules = scheduleRepository.findAllByOrderByUpdatedAtDesc();
         }
 
-        return new SchedulesResponseDto(schedules);
+        List<ScheduleResponseDto> scheduleResponseDtoList = schedules.stream()
+                .map(ScheduleResponseDto::new)
+                .toList();
+
+        return new SchedulesResponseDto(scheduleResponseDtoList);
     }
 
     @Override
