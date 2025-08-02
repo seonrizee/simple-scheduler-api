@@ -59,7 +59,7 @@ public class ScheduleController {
     public ResponseEntity<CommonDto<ScheduleResponseDto>> updateSchedule(
             @RequestBody ScheduleUpdateRequestDto requestDto,
             @PathVariable Long id) {
-        ScheduleResponseDto responseDto = scheduleService.updateSchedulebyId(id, requestDto);
+        ScheduleResponseDto responseDto = scheduleService.updateScheduleById(id, requestDto);
 
         return new ResponseEntity<>(new CommonDto<>(HttpStatus.OK, "success", responseDto), HttpStatus.OK);
     }

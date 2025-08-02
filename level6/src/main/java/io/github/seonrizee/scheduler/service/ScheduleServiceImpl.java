@@ -71,7 +71,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional
-    public ScheduleResponseDto updateSchedulebyId(Long id, ScheduleUpdateRequestDto requestDto) {
+    public ScheduleResponseDto updateScheduleById(Long id, ScheduleUpdateRequestDto requestDto) {
 
         Schedule foundSchedule = findScheduleByIdOrThrow(id);
 

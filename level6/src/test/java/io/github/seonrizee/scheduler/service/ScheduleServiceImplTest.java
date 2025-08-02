@@ -151,7 +151,7 @@ class ScheduleServiceImplTest {
 
     @Test
     @DisplayName("사용자는 선택한 일정에 대해 입력한 비밀번호가 일치하면 일정을 수정할 수 있다.")
-    void updateSchedulebyId_withValidIdAndPassword_shouldSucceed() {
+    void updateScheduleById_withValidIdAndPassword_shouldSucceed() {
         // given
         final Long existentId = 1L;
         final String password = "1234";
@@ -170,7 +170,7 @@ class ScheduleServiceImplTest {
                 invocation -> invocation.getArgument(0));
 
         // when
-        final ScheduleResponseDto responseDto = scheduleService.updateSchedulebyId(existentId, requestDto);
+        final ScheduleResponseDto responseDto = scheduleService.updateScheduleById(existentId, requestDto);
 
         // then
         assertThat(responseDto.getTitle()).isEqualTo(updatedTitle);
@@ -193,7 +193,7 @@ class ScheduleServiceImplTest {
 
         // when & then
         // ScheduleNotFoundException이 발생하는지 검증
-        assertThatThrownBy(() -> scheduleService.updateSchedulebyId(nonExistentId, requestDto))
+        assertThatThrownBy(() -> scheduleService.updateScheduleById(nonExistentId, requestDto))
                 .isInstanceOf(ScheduleNotFoundException.class);
 
         // Repository 메서드 호출 횟수 검증 (saveAndFlush는 호출되면 안 됨)
@@ -203,7 +203,7 @@ class ScheduleServiceImplTest {
 
     @Test
     @DisplayName("일정 수정 시 비밀번호가 일치하지 않으면 예외가 발생한다.")
-    void updateSchedulebyId_withIncorrectPassword_shouldThrowInvalidPasswordException() {
+    void updateScheduleById_withIncorrectPassword_shouldThrowInvalidPasswordException() {
         // given
         final Long existentId = 1L;
         final String correctPassword = "1234";
@@ -217,7 +217,7 @@ class ScheduleServiceImplTest {
         when(scheduleRepository.findById(existentId)).thenReturn(Optional.of(existingSchedule));
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.updateSchedulebyId(existentId, requestDto))
+        assertThatThrownBy(() -> scheduleService.updateScheduleById(existentId, requestDto))
                 .isInstanceOf(InvalidPasswordException.class)
                 .hasMessage("비밀번호가 일치하지 않습니다.");
 
