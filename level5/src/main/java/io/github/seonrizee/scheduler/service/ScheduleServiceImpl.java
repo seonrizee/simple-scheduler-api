@@ -86,8 +86,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleRepository.deleteById(id);
     }
 
-
-    private Schedule findScheduleByIdOrThrow(Long id) {
+    @Override
+    @Transactional(readOnly = true)
+    public Schedule findScheduleByIdOrThrow(Long id) {
         return scheduleRepository.findById(id)
                 .orElseThrow(ScheduleNotFoundException::new);
     }
