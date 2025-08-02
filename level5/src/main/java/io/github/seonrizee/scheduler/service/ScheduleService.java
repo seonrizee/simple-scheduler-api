@@ -5,6 +5,7 @@ import io.github.seonrizee.scheduler.dto.request.ScheduleRequestDto;
 import io.github.seonrizee.scheduler.dto.request.ScheduleUpdateRequestDto;
 import io.github.seonrizee.scheduler.dto.response.ScheduleResponseDto;
 import io.github.seonrizee.scheduler.dto.response.SchedulesResponseDto;
+import io.github.seonrizee.scheduler.entity.Schedule;
 import java.util.Optional;
 
 public interface ScheduleService {
@@ -18,4 +19,7 @@ public interface ScheduleService {
     ScheduleResponseDto updateSchedule(Long id, ScheduleUpdateRequestDto requestDto);
 
     void deleteScheduleById(Long id, PasswordRequestDto password);
+
+    Schedule findScheduleByIdOrThrow(Long id);
+
 }

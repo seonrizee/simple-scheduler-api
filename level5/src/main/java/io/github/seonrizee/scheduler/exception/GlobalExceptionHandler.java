@@ -22,4 +22,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new CommonDto<>(HttpStatus.BAD_REQUEST, e.getMessage(), null),
                 HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(CommentLimitExceededException.class)
+    public ResponseEntity<CommonDto<Void>> handleCommentLimitExceededException(CommentLimitExceededException e) {
+
+        return new ResponseEntity<>(new CommonDto<>(HttpStatus.BAD_REQUEST, e.getMessage(), null),
+                HttpStatus.BAD_REQUEST);
+    }
 }
