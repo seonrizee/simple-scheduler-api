@@ -212,7 +212,7 @@ class ScheduleServiceImplTest {
         final Schedule existingSchedule = new Schedule(
                 new ScheduleRequestDto("원본 제목", "원본 내용", "user1", correctPassword));
         final ScheduleUpdateRequestDto requestDto = new ScheduleUpdateRequestDto("수정된 제목", "수정된 작성자",
-                "incorrect_password");
+                incorrectPassword);
 
         when(scheduleRepository.findById(existentId)).thenReturn(Optional.of(existingSchedule));
 
