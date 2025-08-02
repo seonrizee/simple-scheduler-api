@@ -10,14 +10,14 @@ import lombok.Getter;
 public class CommentResponseDto {
 
     private Long id;
-    private String comment;
+    private String contents;
     private String username;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public CommentResponseDto(Comment savedComment) {
         this.id = savedComment.getId();
-        this.comment = savedComment.getContents();
+        this.contents = savedComment.getContents();
         this.username = savedComment.getUsername();
         this.createdAt = savedComment.getCreatedAt();
         this.updatedAt = savedComment.getUpdatedAt();

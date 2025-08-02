@@ -22,7 +22,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentResponseDto createComment(CommentRequestDto requestDto, Long scheduleId) {
+    public CommentResponseDto createComment(Long scheduleId, CommentRequestDto requestDto) {
 
         scheduleService.findScheduleByIdOrThrow(scheduleId);
 

@@ -5,5 +5,5 @@ import io.github.seonrizee.scheduler.dto.response.CommentResponseDto;
 
 public interface CommentService {
 
-    CommentResponseDto createComment(CommentRequestDto requestDto, Long scheduleId);
+    CommentResponseDto createComment(Long scheduleId, CommentRequestDto requestDto);
 }
