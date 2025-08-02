@@ -49,7 +49,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional(readOnly = true)
-    public ScheduleResponseDto findById(Long id) {
+    public ScheduleResponseDto findScheduleById(Long id) {
 
         Schedule foundSchedule = findScheduleByIdOrThrow(id);
 
@@ -58,7 +58,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional
-    public ScheduleResponseDto updateSchedule(Long id, ScheduleUpdateRequestDto requestDto) {
+    public ScheduleResponseDto updateSchedulebyId(Long id, ScheduleUpdateRequestDto requestDto) {
 
         Schedule foundSchedule = findScheduleByIdOrThrow(id);
 

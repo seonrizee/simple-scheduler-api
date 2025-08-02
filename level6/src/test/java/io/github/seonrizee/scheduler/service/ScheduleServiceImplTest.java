@@ -109,7 +109,7 @@ class ScheduleServiceImplTest {
 
     @Test
     @DisplayName("사용자는 ID로 특정 일정을 조회할 수 있다.")
-    void findById_withExistingId_shouldReturnSchedule() {
+    void findScheduleById_withExistingId_shouldReturnSchedule() {
 
         // given
         final Long existentId = 1L;
@@ -122,7 +122,7 @@ class ScheduleServiceImplTest {
         when(scheduleRepository.findById(existentId)).thenReturn(Optional.of(foundSchedule));
 
         // when
-        final ScheduleResponseDto responseDto = scheduleService.findById(existentId);
+        final ScheduleResponseDto responseDto = scheduleService.findScheduleById(existentId);
 
         // then
         assertThat(responseDto).isNotNull();
@@ -135,14 +135,14 @@ class ScheduleServiceImplTest {
 
     @Test
     @DisplayName("사용자가 존재하지 않는 ID로 조회 시 예외가 발생한다.")
-    void findById_withNonExistentId_shouldThrowScheduleNotFoundException() {
+    void findScheduleById_withNonExistentId_shouldThrowScheduleNotFoundException() {
 
         // given
         final Long nonExistentId = 99L;
         when(scheduleRepository.findById(nonExistentId)).thenReturn(Optional.empty());
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.findById(nonExistentId))
+        assertThatThrownBy(() -> scheduleService.findScheduleById(nonExistentId))
                 .isInstanceOf(ScheduleNotFoundException.class) // 예외 타입 검증
                 .hasMessage("선택한 일정이 존재하지 않습니다."); // 예외 메시지 검증
 
@@ -151,7 +151,7 @@ class ScheduleServiceImplTest {
 
     @Test
     @DisplayName("사용자는 선택한 일정에 대해 입력한 비밀번호가 일치하면 일정을 수정할 수 있다.")
-    void updateSchedule_withValidIdAndPassword_shouldSucceed() {
+    void updateSchedulebyId_withValidIdAndPassword_shouldSucceed() {
         // given
         final Long existentId = 1L;
         final String password = "1234";
@@ -170,7 +170,7 @@ class ScheduleServiceImplTest {
                 invocation -> invocation.getArgument(0));
 
         // when
-        final ScheduleResponseDto responseDto = scheduleService.updateSchedule(existentId, requestDto);
+        final ScheduleResponseDto responseDto = scheduleService.updateSchedulebyId(existentId, requestDto);
 
         // then
         assertThat(responseDto.getTitle()).isEqualTo(updatedTitle);
@@ -183,7 +183,7 @@ class ScheduleServiceImplTest {
 
     @Test
     @DisplayName("일정 수정 시 선택한 일정의 ID가 존재하지 않으면 예외가 발생한다.")
-    void updateSchedule_withNonExistentId_shouldThrowScheduleNotFoundException() {
+    void updateSchedule_withNonExistentId_shouldThrowSchedulebyIdNotFoundException() {
         // given
         final Long nonExistentId = 99L;
         final ScheduleUpdateRequestDto requestDto = new ScheduleUpdateRequestDto("제목", "작성자", "1234");
@@ -193,7 +193,7 @@ class ScheduleServiceImplTest {
 
         // when & then
         // ScheduleNotFoundException이 발생하는지 검증
-        assertThatThrownBy(() -> scheduleService.updateSchedule(nonExistentId, requestDto))
+        assertThatThrownBy(() -> scheduleService.updateSchedulebyId(nonExistentId, requestDto))
                 .isInstanceOf(ScheduleNotFoundException.class);
 
         // Repository 메서드 호출 횟수 검증 (saveAndFlush는 호출되면 안 됨)
@@ -203,7 +203,7 @@ class ScheduleServiceImplTest {
 
     @Test
     @DisplayName("일정 수정 시 비밀번호가 일치하지 않으면 예외가 발생한다.")
-    void updateSchedule_withIncorrectPassword_shouldThrowInvalidPasswordException() {
+    void updateSchedulebyId_withIncorrectPassword_shouldThrowInvalidPasswordException() {
         // given
         final Long existentId = 1L;
         final String correctPassword = "1234";
@@ -217,7 +217,7 @@ class ScheduleServiceImplTest {
         when(scheduleRepository.findById(existentId)).thenReturn(Optional.of(existingSchedule));
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.updateSchedule(existentId, requestDto))
+        assertThatThrownBy(() -> scheduleService.updateSchedulebyId(existentId, requestDto))
                 .isInstanceOf(InvalidPasswordException.class)
                 .hasMessage("비밀번호가 일치하지 않습니다.");
 

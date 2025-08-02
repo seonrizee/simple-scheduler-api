@@ -50,7 +50,7 @@ public class ScheduleController {
     @GetMapping("/{id}")
     public ResponseEntity<CommonDto<ScheduleResponseDto>> getSchedule(@PathVariable Long id) {
 
-        ScheduleResponseDto responseDto = scheduleService.findById(id);
+        ScheduleResponseDto responseDto = scheduleService.findScheduleById(id);
 
         return new ResponseEntity<>(new CommonDto<>(HttpStatus.OK, "success", responseDto), HttpStatus.OK);
     }
@@ -59,7 +59,7 @@ public class ScheduleController {
     public ResponseEntity<CommonDto<ScheduleResponseDto>> updateSchedule(
             @RequestBody ScheduleUpdateRequestDto requestDto,
             @PathVariable Long id) {
-        ScheduleResponseDto responseDto = scheduleService.updateSchedule(id, requestDto);
+        ScheduleResponseDto responseDto = scheduleService.updateSchedulebyId(id, requestDto);
 
         return new ResponseEntity<>(new CommonDto<>(HttpStatus.OK, "success", responseDto), HttpStatus.OK);
     }
