@@ -1,5 +1,6 @@
 package io.github.seonrizee.scheduler.controller;
 
+import io.github.seonrizee.scheduler.dto.request.PasswordRequestDto;
 import io.github.seonrizee.scheduler.dto.request.ScheduleRequestDto;
 import io.github.seonrizee.scheduler.dto.request.ScheduleUpdateRequestDto;
 import io.github.seonrizee.scheduler.dto.response.CommonDto;
@@ -9,6 +10,7 @@ import io.github.seonrizee.scheduler.service.ScheduleService;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,4 +64,12 @@ public class ScheduleController {
         return new ResponseEntity<>(new CommonDto<>(HttpStatus.OK, "success", responseDto), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CommonDto<Void>> deleteSchedule(@RequestBody PasswordRequestDto requestDto,
+                                                          @PathVariable Long id) {
+
+        scheduleService.deleteScheduleById(id, requestDto);
+
+        return new ResponseEntity<>(new CommonDto<>(HttpStatus.OK, "success", null), HttpStatus.OK);
+    }
 }

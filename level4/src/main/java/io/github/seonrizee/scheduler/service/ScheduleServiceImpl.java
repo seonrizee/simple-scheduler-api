@@ -1,5 +1,6 @@
 package io.github.seonrizee.scheduler.service;
 
+import io.github.seonrizee.scheduler.dto.request.PasswordRequestDto;
 import io.github.seonrizee.scheduler.dto.request.ScheduleRequestDto;
 import io.github.seonrizee.scheduler.dto.request.ScheduleUpdateRequestDto;
 import io.github.seonrizee.scheduler.dto.response.ScheduleResponseDto;
@@ -60,7 +61,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ScheduleResponseDto updateSchedule(Long id, ScheduleUpdateRequestDto requestDto) {
 
         Schedule foundSchedule = findScheduleByIdOrThrow(id);
-        
+
         if (!foundSchedule.getPassword().equals(requestDto.getPassword())) {
             throw new InvalidPasswordException();
         }
@@ -70,6 +71,19 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleRepository.saveAndFlush(foundSchedule);
 
         return new ScheduleResponseDto(foundSchedule);
+    }
+
+    @Override
+    @Transactional
+    public void deleteScheduleById(Long id, PasswordRequestDto requestDto) {
+
+        Schedule foundSchedule = findScheduleByIdOrThrow(id);
+
+        if (!foundSchedule.getPassword().equals(requestDto.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+
+        scheduleRepository.deleteById(id);
     }
 
     private Schedule findScheduleByIdOrThrow(Long id) {

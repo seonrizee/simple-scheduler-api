@@ -1,5 +1,6 @@
 package io.github.seonrizee.scheduler.service;
 
+import io.github.seonrizee.scheduler.dto.request.PasswordRequestDto;
 import io.github.seonrizee.scheduler.dto.request.ScheduleRequestDto;
 import io.github.seonrizee.scheduler.dto.request.ScheduleUpdateRequestDto;
 import io.github.seonrizee.scheduler.dto.response.ScheduleResponseDto;
@@ -15,4 +16,6 @@ public interface ScheduleService {
     ScheduleResponseDto findById(Long id);
 
     ScheduleResponseDto updateSchedule(Long id, ScheduleUpdateRequestDto requestDto);
+
+    void deleteScheduleById(Long id, PasswordRequestDto password);
 }
