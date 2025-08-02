@@ -5,5 +5,5 @@ plugins {
 }
 
 bootJar {
-    mainClass = 'io.github.seonrizee.scheduler.Level2Application'
+    mainClass = 'io.github.seonrizee.scheduler.Level3Application'
 }
