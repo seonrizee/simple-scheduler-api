@@ -1,7 +1,6 @@
 package io.github.seonrizee.scheduler.exception;
 
-import io.github.seonrizee.scheduler.dto.response.CommonDto;
-import org.springframework.http.HttpStatus;
+import io.github.seonrizee.scheduler.dto.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -10,30 +9,26 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ScheduleNotFoundException.class)
-    public ResponseEntity<CommonDto<Void>> handleScheduleNotFoundException(ScheduleNotFoundException e) {
+    public ResponseEntity<ApiResponse<Void>> handleScheduleNotFoundException(ScheduleNotFoundException e) {
 
-        return new ResponseEntity<>(new CommonDto<>(HttpStatus.NOT_FOUND, e.getMessage(), null),
-                HttpStatus.NOT_FOUND);
+        return ApiResponse.notFound(e.getMessage());
     }
 
     @ExceptionHandler(InvalidPasswordException.class)
-    public ResponseEntity<CommonDto<Void>> handleInvalidPasswordException(InvalidPasswordException e) {
+    public ResponseEntity<ApiResponse<Void>> handleInvalidPasswordException(InvalidPasswordException e) {
 
-        return new ResponseEntity<>(new CommonDto<>(HttpStatus.BAD_REQUEST, e.getMessage(), null),
-                HttpStatus.BAD_REQUEST);
+        return ApiResponse.badRequest(e.getMessage());
     }
 
     @ExceptionHandler(CommentLimitExceededException.class)
-    public ResponseEntity<CommonDto<Void>> handleCommentLimitExceededException(CommentLimitExceededException e) {
+    public ResponseEntity<ApiResponse<Void>> handleCommentLimitExceededException(CommentLimitExceededException e) {
 
-        return new ResponseEntity<>(new CommonDto<>(HttpStatus.BAD_REQUEST, e.getMessage(), null),
-                HttpStatus.BAD_REQUEST);
+        return ApiResponse.badRequest(e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<CommonDto<Void>> handleIllegalArgumentException(IllegalArgumentException e) {
+    public ResponseEntity<ApiResponse<Void>> handleIllegalArgumentException(IllegalArgumentException e) {
 
-        return new ResponseEntity<>(new CommonDto<>(HttpStatus.BAD_REQUEST, e.getMessage(), null),
-                HttpStatus.BAD_REQUEST);
+        return ApiResponse.badRequest(e.getMessage());
     }
 }

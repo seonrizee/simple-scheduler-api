@@ -3,14 +3,13 @@ package io.github.seonrizee.scheduler.controller;
 import io.github.seonrizee.scheduler.dto.request.ScheduleCreateRequestDto;
 import io.github.seonrizee.scheduler.dto.request.ScheduleDeleteRequestDto;
 import io.github.seonrizee.scheduler.dto.request.ScheduleUpdateRequestDto;
-import io.github.seonrizee.scheduler.dto.response.CommonDto;
+import io.github.seonrizee.scheduler.dto.response.ApiResponse;
 import io.github.seonrizee.scheduler.dto.response.ScheduleResponseDto;
 import io.github.seonrizee.scheduler.dto.response.SchedulesResponseDto;
 import io.github.seonrizee.scheduler.service.ScheduleService;
 import io.github.seonrizee.scheduler.validator.Validator;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,35 +32,35 @@ public class ScheduleController {
     private final Validator<ScheduleDeleteRequestDto> scheduleDeleteRequestDtoValidator;
 
     @PostMapping
-    public ResponseEntity<CommonDto<ScheduleResponseDto>> createSchedule(
+    public ResponseEntity<ApiResponse<ScheduleResponseDto>> createSchedule(
             @RequestBody ScheduleCreateRequestDto requestDto) {
 
         scheduleCreateRequestDtoValidator.validate(requestDto);
 
         ScheduleResponseDto responseDto = scheduleService.createSchedule(requestDto);
-        return new ResponseEntity<>(new CommonDto<>(HttpStatus.CREATED, "success", responseDto),
-                HttpStatus.CREATED);
+
+        return ApiResponse.created(responseDto);
     }
 
     @GetMapping
-    public ResponseEntity<CommonDto<SchedulesResponseDto>> getSchedules(
+    public ResponseEntity<ApiResponse<SchedulesResponseDto>> getSchedules(
             @RequestParam(required = false) Optional<String> username) {
 
         SchedulesResponseDto responseDto = scheduleService.findAllSchedules(username);
 
-        return new ResponseEntity<>(new CommonDto<>(HttpStatus.OK, "success", responseDto), HttpStatus.OK);
+        return ApiResponse.ok(responseDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CommonDto<ScheduleResponseDto>> getSchedule(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<ScheduleResponseDto>> getSchedule(@PathVariable Long id) {
 
         ScheduleResponseDto responseDto = scheduleService.findScheduleById(id);
 
-        return new ResponseEntity<>(new CommonDto<>(HttpStatus.OK, "success", responseDto), HttpStatus.OK);
+        return ApiResponse.ok(responseDto);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CommonDto<ScheduleResponseDto>> updateSchedule(
+    public ResponseEntity<ApiResponse<ScheduleResponseDto>> updateSchedule(
             @PathVariable Long id,
             @RequestBody ScheduleUpdateRequestDto requestDto
     ) {
@@ -69,11 +68,11 @@ public class ScheduleController {
         scheduleUpdateRequestDtoValidator.validate(requestDto);
         ScheduleResponseDto responseDto = scheduleService.updateScheduleById(id, requestDto);
 
-        return new ResponseEntity<>(new CommonDto<>(HttpStatus.OK, "success", responseDto), HttpStatus.OK);
+        return ApiResponse.ok(responseDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CommonDto<Void>> deleteSchedule(
+    public ResponseEntity<ApiResponse<Void>> deleteSchedule(
             @PathVariable Long id,
             @RequestBody ScheduleDeleteRequestDto requestDto
     ) {
@@ -81,6 +80,6 @@ public class ScheduleController {
         scheduleDeleteRequestDtoValidator.validate(requestDto);
         scheduleService.deleteScheduleById(id, requestDto);
 
-        return new ResponseEntity<>(new CommonDto<>(HttpStatus.OK, "success", null), HttpStatus.OK);
+        return ApiResponse.ok();
     }
 }
