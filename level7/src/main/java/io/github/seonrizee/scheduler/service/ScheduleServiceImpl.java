@@ -8,6 +8,7 @@ import io.github.seonrizee.scheduler.dto.response.SchedulesResponseDto;
 import io.github.seonrizee.scheduler.entity.Schedule;
 import io.github.seonrizee.scheduler.exception.InvalidPasswordException;
 import io.github.seonrizee.scheduler.exception.ScheduleNotFoundException;
+import io.github.seonrizee.scheduler.mapper.ScheduleMapper;
 import io.github.seonrizee.scheduler.repository.ScheduleRepository;
 import java.util.List;
 import java.util.Optional;
@@ -21,14 +22,15 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final CommentService commentService;
+    private final ScheduleMapper scheduleMapper;
 
     @Override
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleCreateRequestDto requestDto) {
 
-        Schedule savedSchedule = scheduleRepository.save(new Schedule(requestDto));
+        Schedule savedSchedule = scheduleRepository.save(scheduleMapper.toEntity(requestDto));
 
-        return new ScheduleResponseDto(savedSchedule);
+        return scheduleMapper.toResponseDto(savedSchedule);
     }
 
     @Override
@@ -43,11 +45,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             schedules = scheduleRepository.findAllByOrderByUpdatedAtDesc();
         }
 
-        List<ScheduleResponseDto> scheduleResponseDtoList = schedules.stream()
-                .map(ScheduleResponseDto::new)
-                .toList();
-
-        return new SchedulesResponseDto(scheduleResponseDtoList);
+        return scheduleMapper.toSchedulesResponseDto(schedules);
     }
 
     @Override
@@ -56,7 +54,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         Schedule foundSchedule = findScheduleByIdOrThrow(id);
 
-        return new ScheduleResponseDto(foundSchedule, commentService.findCommentsByScheduleId(id));
+        return scheduleMapper.toResponseDto(foundSchedule, commentService.findCommentsByScheduleId(id));
     }
 
     @Override
@@ -69,11 +67,11 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new InvalidPasswordException();
         }
 
-        foundSchedule.updateById(requestDto);
+        foundSchedule.updateById(requestDto.getTitle(), requestDto.getUsername());
 
         scheduleRepository.saveAndFlush(foundSchedule);
 
-        return new ScheduleResponseDto(foundSchedule);
+        return scheduleMapper.toResponseDto(foundSchedule);
     }
 
     @Override

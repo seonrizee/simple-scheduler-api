@@ -8,7 +8,6 @@ import io.github.seonrizee.scheduler.dto.response.ScheduleResponseDto;
 import io.github.seonrizee.scheduler.dto.response.SchedulesResponseDto;
 import io.github.seonrizee.scheduler.service.ScheduleService;
 import io.github.seonrizee.scheduler.validator.Validator;
-import io.github.seonrizee.scheduler.validator.field.UsernameValidator;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,7 +31,6 @@ public class ScheduleController {
     private final Validator<ScheduleCreateRequestDto> scheduleCreateRequestDtoValidator;
     private final Validator<ScheduleUpdateRequestDto> scheduleUpdateRequestDtoValidator;
     private final Validator<ScheduleDeleteRequestDto> scheduleDeleteRequestDtoValidator;
-    private final UsernameValidator usernameValidator;
 
     @PostMapping
     public ResponseEntity<CommonDto<ScheduleResponseDto>> createSchedule(

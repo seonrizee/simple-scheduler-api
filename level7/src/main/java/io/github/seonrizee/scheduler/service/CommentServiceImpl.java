@@ -6,6 +6,7 @@ import io.github.seonrizee.scheduler.dto.response.CommentsResponseDto;
 import io.github.seonrizee.scheduler.entity.Comment;
 import io.github.seonrizee.scheduler.exception.CommentLimitExceededException;
 import io.github.seonrizee.scheduler.exception.ScheduleNotFoundException;
+import io.github.seonrizee.scheduler.mapper.CommentMapper;
 import io.github.seonrizee.scheduler.repository.CommentRepository;
 import io.github.seonrizee.scheduler.repository.ScheduleRepository;
 import java.util.List;
@@ -21,6 +22,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;
+    private final CommentMapper commentMapper;
 
     @Override
     @Transactional
@@ -34,9 +36,9 @@ public class CommentServiceImpl implements CommentService {
             throw new CommentLimitExceededException();
         }
 
-        Comment savedComment = commentRepository.save(new Comment(scheduleId, requestDto));
+        Comment savedComment = commentRepository.save(commentMapper.toEntity(scheduleId, requestDto));
 
-        return new CommentResponseDto(savedComment);
+        return commentMapper.toResponseDto(savedComment);
     }
 
     @Override
@@ -45,9 +47,6 @@ public class CommentServiceImpl implements CommentService {
 
         List<Comment> comments = commentRepository.findAllByScheduleId(scheduleId);
 
-        return new CommentsResponseDto(
-                comments.stream()
-                        .map(CommentResponseDto::new)
-                        .toList());
+        return commentMapper.toCommentsResponseDto(comments);
     }
 }

@@ -23,8 +23,9 @@ public class CommentController {
     private final CommentCreateRequestValidator commentCreateRequestValidator;
 
     @PostMapping
-    public ResponseEntity<CommonDto<CommentResponseDto>> createComment(@RequestBody CommentCreateRequestDto requestDto,
-                                                                       @PathVariable Long scheduleId) {
+    public ResponseEntity<CommonDto<CommentResponseDto>> createComment(
+            @PathVariable Long scheduleId,
+            @RequestBody CommentCreateRequestDto requestDto) {
 
         commentCreateRequestValidator.validate(requestDto);
 

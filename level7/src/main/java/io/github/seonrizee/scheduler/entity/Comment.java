@@ -1,11 +1,11 @@
 package io.github.seonrizee.scheduler.entity;
 
-import io.github.seonrizee.scheduler.dto.request.CommentCreateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,10 +30,11 @@ public class Comment extends BaseDateEntity {
     @Column(nullable = false)
     private String password;
 
-    public Comment(Long scheduleId, CommentCreateRequestDto requestDto) {
+    @Builder
+    public Comment(Long scheduleId, String contents, String username, String password) {
         this.scheduleId = scheduleId;
-        this.contents = requestDto.getContents();
-        this.username = requestDto.getUsername();
-        this.password = requestDto.getPassword();
+        this.contents = contents;
+        this.username = username;
+        this.password = password;
     }
 }
