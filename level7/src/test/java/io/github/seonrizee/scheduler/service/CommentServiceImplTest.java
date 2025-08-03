@@ -8,7 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.github.seonrizee.scheduler.dto.request.CommentRequestDto;
+import io.github.seonrizee.scheduler.dto.request.CommentCreateRequestDto;
 import io.github.seonrizee.scheduler.dto.response.CommentResponseDto;
 import io.github.seonrizee.scheduler.entity.Comment;
 import io.github.seonrizee.scheduler.entity.Schedule;
@@ -45,7 +45,7 @@ class CommentServiceImplTest {
         final String contents = "새로운 댓글입니다.";
         final String username = "user1";
         final String password = "1234";
-        final CommentRequestDto requestDto = new CommentRequestDto(contents, username, password);
+        final CommentCreateRequestDto requestDto = new CommentCreateRequestDto(contents, username, password);
         final Comment savedComment = new Comment(scheduleId, requestDto);
 
         // Mocking
@@ -74,7 +74,7 @@ class CommentServiceImplTest {
     void createComment_withNonExistentSchedule_shouldThrowScheduleNotFoundException() {
         // given
         final Long nonExistentScheduleId = 99L;
-        final CommentRequestDto requestDto = new CommentRequestDto("내용", "작성자", "1234");
+        final CommentCreateRequestDto requestDto = new CommentCreateRequestDto("내용", "작성자", "1234");
 
         // Mocking: scheduleRepository가 비어있는 Optional을 반환한다고 가정
         when(scheduleRepository.findById(nonExistentScheduleId)).thenReturn(Optional.empty());
@@ -94,7 +94,7 @@ class CommentServiceImplTest {
     void createComment_whenCommentLimitIsExceeded_shouldThrowCommentLimitExceededException() {
         // given
         final Long scheduleId = 1L;
-        final CommentRequestDto requestDto = new CommentRequestDto("내용", "작성자", "1234");
+        final CommentCreateRequestDto requestDto = new CommentCreateRequestDto("내용", "작성자", "1234");
 
         when(scheduleRepository.findById(scheduleId)).thenReturn(Optional.of(new Schedule()));
         when(commentRepository.countByScheduleId(scheduleId)).thenReturn(10L);

@@ -8,9 +8,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.github.seonrizee.scheduler.dto.request.CommentRequestDto;
-import io.github.seonrizee.scheduler.dto.request.PasswordRequestDto;
-import io.github.seonrizee.scheduler.dto.request.ScheduleRequestDto;
+import io.github.seonrizee.scheduler.dto.request.CommentCreateRequestDto;
+import io.github.seonrizee.scheduler.dto.request.ScheduleCreateRequestDto;
+import io.github.seonrizee.scheduler.dto.request.ScheduleDeleteRequestDto;
 import io.github.seonrizee.scheduler.dto.request.ScheduleUpdateRequestDto;
 import io.github.seonrizee.scheduler.dto.response.CommentResponseDto;
 import io.github.seonrizee.scheduler.dto.response.CommentsResponseDto;
@@ -50,7 +50,7 @@ class ScheduleServiceImplTest {
         final String contents = "테스트 내용";
         final String username = "user";
         final String password = "1234";
-        final ScheduleRequestDto requestDto = new ScheduleRequestDto(title, contents, username, password);
+        final ScheduleCreateRequestDto requestDto = new ScheduleCreateRequestDto(title, contents, username, password);
         final Schedule schedule = new Schedule(requestDto);
 
         when(scheduleRepository.save(any(Schedule.class))).thenReturn(schedule);
@@ -72,9 +72,9 @@ class ScheduleServiceImplTest {
     void findAllSchedules_withoutUsername_shouldReturnAllSchedules() {
         // given
         final Schedule schedule1 = new Schedule(
-                new ScheduleRequestDto("테스트 제목 1", "테스트 내용 1", "user1", "1111"));
+                new ScheduleCreateRequestDto("테스트 제목 1", "테스트 내용 1", "user1", "1111"));
         final Schedule schedule2 = new Schedule(
-                new ScheduleRequestDto("테스트 제목 2", "테스트 내용 2", "user2", "2222"));
+                new ScheduleCreateRequestDto("테스트 제목 2", "테스트 내용 2", "user2", "2222"));
         final List<Schedule> allSchedules = List.of(schedule1, schedule2);
 
         when(scheduleRepository.findAllByOrderByUpdatedAtDesc()).thenReturn(allSchedules);
@@ -95,7 +95,7 @@ class ScheduleServiceImplTest {
         // given
         final Long existentId = 1L;
         final Schedule schedule = new Schedule(
-                new ScheduleRequestDto("일정 제목", "일정 내용", "user", "pass"));
+                new ScheduleCreateRequestDto("일정 제목", "일정 내용", "user", "pass"));
 
         // Mocking: 댓글이 없는 상황을 가정
         when(scheduleRepository.findById(existentId)).thenReturn(Optional.of(schedule));
@@ -122,12 +122,12 @@ class ScheduleServiceImplTest {
         // given
         final Long existentId = 1L;
         final Schedule schedule = new Schedule(
-                new ScheduleRequestDto("일정 제목", "일정 내용", "user", "pass"));
+                new ScheduleCreateRequestDto("일정 제목", "일정 내용", "user", "pass"));
 
         // 댓글 목록 준비
         final List<CommentResponseDto> commentDtos = List.of(
-                new CommentResponseDto(new Comment(existentId, new CommentRequestDto("댓글 1", "c1", "p1"))),
-                new CommentResponseDto(new Comment(existentId, new CommentRequestDto("댓글 2", "c2", "p2")))
+                new CommentResponseDto(new Comment(existentId, new CommentCreateRequestDto("댓글 1", "c1", "p1"))),
+                new CommentResponseDto(new Comment(existentId, new CommentCreateRequestDto("댓글 2", "c2", "p2")))
         );
         final CommentsResponseDto commentsResponseDto = new CommentsResponseDto(commentDtos);
 
@@ -178,7 +178,7 @@ class ScheduleServiceImplTest {
         final String updatedUsername = "수정된 작성자";
 
         final Schedule existingSchedule = new Schedule(
-                new ScheduleRequestDto("원본 제목", originalContents, "user1", password));
+                new ScheduleCreateRequestDto("원본 제목", originalContents, "user1", password));
         final ScheduleUpdateRequestDto requestDto = new ScheduleUpdateRequestDto(updatedTitle,
                 updatedUsername,
                 password);
@@ -226,7 +226,7 @@ class ScheduleServiceImplTest {
         final String incorrectPassword = "wrong_password";
 
         final Schedule existingSchedule = new Schedule(
-                new ScheduleRequestDto("Original Title", "Contents", "user1", correctPassword));
+                new ScheduleCreateRequestDto("Original Title", "Contents", "user1", correctPassword));
         final ScheduleUpdateRequestDto requestDto = new ScheduleUpdateRequestDto("Updated Title",
                 "Updated User", incorrectPassword);
 
@@ -246,9 +246,9 @@ class ScheduleServiceImplTest {
         // given
         final Long existentId = 1L;
         final String correctPassword = "password123";
-        final PasswordRequestDto requestDto = new PasswordRequestDto(correctPassword);
+        final ScheduleDeleteRequestDto requestDto = new ScheduleDeleteRequestDto(correctPassword);
         final Schedule existingSchedule = new Schedule(
-                new ScheduleRequestDto("Title", "Contents", "user", correctPassword));
+                new ScheduleCreateRequestDto("Title", "Contents", "user", correctPassword));
 
         when(scheduleRepository.findById(existentId)).thenReturn(Optional.of(existingSchedule));
 
@@ -265,7 +265,7 @@ class ScheduleServiceImplTest {
     void deleteScheduleById_withNonExistentId_shouldThrowScheduleNotFoundException() {
         // given
         final Long nonExistentId = 99L;
-        final PasswordRequestDto requestDto = new PasswordRequestDto("password123");
+        final ScheduleDeleteRequestDto requestDto = new ScheduleDeleteRequestDto("password123");
 
         when(scheduleRepository.findById(nonExistentId)).thenReturn(Optional.empty());
 
@@ -284,9 +284,9 @@ class ScheduleServiceImplTest {
         final Long existentId = 1L;
         final String correctPassword = "password123";
         final String incorrectPassword = "wrong_password";
-        final PasswordRequestDto requestDto = new PasswordRequestDto(incorrectPassword);
+        final ScheduleDeleteRequestDto requestDto = new ScheduleDeleteRequestDto(incorrectPassword);
         final Schedule existingSchedule = new Schedule(
-                new ScheduleRequestDto("Title", "Contents", "user", correctPassword));
+                new ScheduleCreateRequestDto("Title", "Contents", "user", correctPassword));
 
         when(scheduleRepository.findById(existentId)).thenReturn(Optional.of(existingSchedule));
 

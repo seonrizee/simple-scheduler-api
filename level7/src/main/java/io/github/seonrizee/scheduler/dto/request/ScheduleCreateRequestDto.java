@@ -1,12 +1,14 @@
 package io.github.seonrizee.scheduler.dto.request;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class PasswordRequestDto {
+public class ScheduleCreateRequestDto {
 
+    private String title;
+    private String contents;
+    private String username;
     private String password;
 }

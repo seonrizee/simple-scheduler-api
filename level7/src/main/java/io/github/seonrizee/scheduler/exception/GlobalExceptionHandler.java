@@ -29,4 +29,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new CommonDto<>(HttpStatus.BAD_REQUEST, e.getMessage(), null),
                 HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<CommonDto<Void>> handleIllegalArgumentException(IllegalArgumentException e) {
+
+        return new ResponseEntity<>(new CommonDto<>(HttpStatus.BAD_REQUEST, e.getMessage(), null),
+                HttpStatus.BAD_REQUEST);
+    }
 }
