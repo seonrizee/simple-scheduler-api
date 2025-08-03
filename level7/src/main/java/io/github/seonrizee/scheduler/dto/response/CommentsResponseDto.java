@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class CommentsResponseDto {
 
-    List<CommentResponseDto> commentResponseDtoList;
+    private final List<CommentResponseDto> commentResponseDtoList;
 
     public CommentsResponseDto(List<CommentResponseDto> commentResponseDtoList) {
         this.commentResponseDtoList = commentResponseDtoList;
