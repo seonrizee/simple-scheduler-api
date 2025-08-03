@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * 단일 댓글 조회 응답 데이터를 담는 DTO
+ */
 @Getter
 @AllArgsConstructor
 public class CommentResponseDto {

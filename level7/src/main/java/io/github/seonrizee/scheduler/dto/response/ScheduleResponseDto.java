@@ -5,6 +5,9 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * 단일 일정 조회 응답 데이터를 담는 DTO
+ */
 @Getter
 @AllArgsConstructor
 public class ScheduleResponseDto {

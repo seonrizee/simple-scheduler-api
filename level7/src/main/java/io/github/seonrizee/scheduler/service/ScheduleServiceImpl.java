@@ -16,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * ScheduleService 인터페이스의 구현체. 일정(Schedule)에 대한 CRUD 비즈니스 로직을 수행합니다. 메소드에 대한 주석은 인터페이스를 참조하세요.
+ */
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
